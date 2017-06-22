@@ -2,18 +2,28 @@
 Written in Python 3. Made with love inside the [Revain](https://revain.org) company.
 
 ## What is it?
-Imagine that you have an application, with allows users to work with cryptocurrencies. So you need to give every user it's own address for deposits and withdraw.
+Imagine that you have an application, with allows users to work with cryptocurrencies. For example, you are using them for the payment receipt (ICO, invest fund, etc). It mean, that every user should have it's own address for Bitcoin, Ethereum, Zcash, Dash, Monero and much much more.
+
+So, you'll need a lot of wallets.
+
+Valets allows you to generate them automatically, so all you need is to use this addresses in your application.
+
+## ⚠️ Warning ⚠️
+### It's highly recommended not to use Valets on production machine.
 
 ## Features:
 - Generate thousands of wallets for:
   - [Bitcoin](https://bitcoin.org/en/)
   - [Ethereum](https://www.ethereum.org/)
-  - [Zcash](https://z.cash/)
-  - [Monero](https://getmonero.org/home)
-  - [Dash](https://www.dash.org/)
-- Encrypt the private keys with the strongest cyphers (AES 128, DES coming soon)
-- Use pass phrases for private key encryption
-- You can generate, for example, 3 pass phrases for CEO, CTO and escrow. So private keys can be decrypted only after all 3 keys were given.
+  - [Zcash](https://z.cash/) (Soon)
+  - [Monero](https://getmonero.org/home) (Soon)
+  - [Dash](https://www.dash.org/) (Soon)
+- After generating wallets for some coin you'll get CSV file with life-critical information
+  - Bitcoin - `Private key, address`
+  - Ethereum - `Passphrase, address` (Private key will be added soon!)
+- Standart wallet formats
+  - Bitcoin - `.bitcoin/wallet.dat`
+  - Ethereum - `.ethereum/keystore/`
 
 ## Usage
 ### Install and launch third party apps
@@ -35,7 +45,6 @@ Run bitcoin server:
 bitcoind -daemon
 ```
 
-
 #### Ethereum
 Installation guide - [here](https://github.com/ethereum/go-ethereum/wiki/Installing-Geth)
 
@@ -45,11 +54,8 @@ sudo apt-get update
 sudo apt-get install ethereum
 ```
 
-#### Zcash
-#### Monero
-#### Dash
-### Generate raw wallets
-### Generate encrypted wallets
-
-## Road map
-- Multisig (unlock private keys with only a part of all pass phrases, e.g. 5 pass phrases from 7)
+## To Do
+- Zcash support
+- Dash support
+- Monero support
+- Automatically encrypt `_valets_....` folder (private keys, passphrases, etc)
