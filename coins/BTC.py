@@ -1,14 +1,21 @@
-from bitcoin import sha256
-from bitcoin import privtopub
-from bitcoin import pubtoaddr
-from random import SystemRandom
+from subprocess import check_output
 
 class BitcoinWallet():
     def __init__(self):
-        pass
+        # Bitcoind should already be started
+        # Otherwise exception will be raised
+        tmp_address = check_output(['bitcoin-cli', 'getnewaddress'])
 
-    def get_private_key(self):
-        return sha256(str(SystemRandom().randint(1, 115792089237316195423570985008687907852837564279074904382605163141518161494337)))
+    def get_private_key(self, address):
+        """Get private key for address with bitcoin-cli"""
+        private_key = check_output(['bitcoin-cli', 'dumpprivkey', address])
+        private_key = private_key.rstrip() # Remove end line symbol
 
-    def get_address(self, private_key):
-        return pubtoaddr(privtopub(private_key))
+        return private_key.decode('utf-8')
+
+    def get_address(self):
+        """Generate new address with bitcoin-cli"""
+        address = check_output(['bitcoin-cli', 'getnewaddress'])
+        address = address.rstrip() # Remove end line symbol
+
+        return address.decode('utf-8')
