@@ -13,6 +13,7 @@ from utils import write_same_line
 import logging
 
 from coins.BTC import BitcoinWallet
+from coins.ETH import EthereumWallet
 
 def _exit(msg):
     logger.error(msg)
@@ -33,15 +34,11 @@ parser.add_argument('-eth', help="Generate ETH (Ethereum) wallets", default=0, t
 parser.add_argument('-dash', help="Generate DASH (Dash) wallets", default=0, type=int)
 parser.add_argument('-xmr', help="Generate XMR (Monero) wallets", default=0, type=int)
 parser.add_argument('-zcash', help="Generate ZEC (ZCash) wallets", default=0, type=int)
-
-parser.add_argument('-k', '--keys', help="Number of keys", default=0, type=int)
-parser.add_argument('-g', '--generate', help="Generate keys", default=0, type=int)
-parser.add_argument('-w', '--wordlist', help="Path to wordlist file", default="wallets/wordlist.txt")
 parser.add_argument('-d', '--dir', help="Directory to store wallets", default="_valets_{}".format(urandom(8).hex()))
 
 if __name__ == "__main__":
     options = parser.parse_args()
-    try: # Trying to init NEW options.dir for storing wallets
+    try: # Trying to init NEW directory for storing wallets
         makedirs(options.dir)
         logger.info("Wallets folder: {}/".format(colored(options.dir, "green")))
     except Exception as e:
@@ -67,9 +64,36 @@ if __name__ == "__main__":
             address = w.get_address()
             private_key = w.get_private_key(address)
             BTC_writer.writerow((private_key, address))
-            write_same_line("New address: {}".format(address))
+            write_same_line("New {} address: {}".format(colored("Bitcoin", "green"), address))
 
         print ("")
         BTC_file.close()
 
         logger.info("{} {} addresses generated successfully".format(options.btc, colored("Bitcoin", "green")))
+
+    # ==================================================================
+    # ==================== GENERATE ETH WALLETS ========================
+    # ==================================================================
+    if options.eth > 0:
+        logger.info("Generating {} {} wallets".format(options.eth, colored("Ethereum", "green")))
+        try: # Trying to init bitcoind and check bitcoin-cli
+            w = EthereumWallet()
+        except Exception as e:
+            _exit(e)
+
+        # Open file for BTC addresses and private keys
+        ETH_file = open("{}/ETH.csv".format(options.dir), "a") # SAFETY IS NUMBER ONE PRIORITY !1
+        ETH_writer = writer(ETH_file)
+        ETH_writer.writerow(('Address'))
+
+        # Generate adresses & private keys
+        for i in range(options.eth):
+            passphase = urandom(16).hex()
+            address = w.get_address(passphase)
+            ETH_writer.writerow((passphase, address))
+            write_same_line("New {} address: {}".format(colored("Ethereum", "green"), address))
+
+        print ("")
+        ETH_file.close()
+
+        logger.info("{} {} addresses generated successfully".format(options.eth, colored("Ethereum", "green")))
