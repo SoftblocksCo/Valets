@@ -2,3 +2,4 @@ venv
 *.pyc
 valets_*
 __pycache__/
+_valets_*
