@@ -9,6 +9,8 @@ from os import urandom
 from termcolor import colored
 from csv import writer
 from utils import write_same_line
+from signal import signal
+from signal import SIGINT
 
 import logging
 
@@ -18,6 +20,11 @@ from coins.ETH import EthereumWallet
 def _exit(msg):
     logger.error(msg)
     exit(1)
+
+def handler(signum, frame):
+    print("")
+    _exit("Ctrl+C pressed, exit")
+signal(SIGINT, handler=handler)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -76,7 +83,7 @@ if __name__ == "__main__":
     # ==================================================================
     if options.eth > 0:
         logger.info("Generating {} {} wallets".format(options.eth, colored("Ethereum", "green")))
-        try: # Trying to init bitcoind and check bitcoin-cli
+        try: # Checking all stuff works correct
             w = EthereumWallet()
         except Exception as e:
             _exit(e)
@@ -84,7 +91,7 @@ if __name__ == "__main__":
         # Open file for BTC addresses and private keys
         ETH_file = open("{}/ETH.csv".format(options.dir), "a") # SAFETY IS NUMBER ONE PRIORITY !1
         ETH_writer = writer(ETH_file)
-        ETH_writer.writerow(('Address'))
+        ETH_writer.writerow(('Passphase', 'Address'))
 
         # Generate adresses & private keys
         for i in range(options.eth):
