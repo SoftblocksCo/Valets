@@ -89,15 +89,16 @@ if __name__ == "__main__":
             _exit(e)
 
         # Open file for BTC addresses and private keys
-        ETH_file = open("{}/ETH.csv".format(options.dir), "a") # SAFETY IS NUMBER ONE PRIORITY !1
-        ETH_writer = writer(ETH_file)
-        ETH_writer.writerow(('Passphase', 'Address'))
+        ETH_file = open("{}/ETH.csv".format(options.dir), "ab") # SAFETY IS NUMBER ONE PRIORITY !1
+        ETH_writer = writer(ETH_file, quotechar = "'")
+        ETH_writer.writerow(('Passphase', 'Address', 'Keystore'))
 
         # Generate adresses & private keys
         for i in range(options.eth):
             passphase = urandom(16).hex()
             address = w.get_address(passphase)
-            ETH_writer.writerow((passphase, address))
+            keystore = w.get_keystore_file(address)
+            ETH_writer.writerow((passphase, address, keystore))
             write_same_line("New {} address: {}".format(colored("Ethereum", "green"), address))
 
         print ("")
