@@ -17,6 +17,7 @@ import logging
 from coins.BTC import BitcoinWallet
 from coins.ETH import EthereumWallet
 from coins.LTC import LitecoinWallet
+from coins.ETC import EthereumClassicWallet
 
 def _exit(msg):
     logger.error(msg)
@@ -82,7 +83,7 @@ if __name__ == "__main__":
         except Exception as e:
             _exit(e)
 
-        with open("{}/ETH.csv".format(options.dir), "ab") as ETH_file:
+        with open("{}/ETH.csv".format(options.dir), "a") as ETH_file:
             ETH_writer = writer(ETH_file, quotechar = "'")
             ETH_writer.writerow(('Passphase', 'Address', 'Keystore'))
 
@@ -117,3 +118,25 @@ if __name__ == "__main__":
             print ("")
 
         logger.info("{} {} addresses generated successfully".format(options.ltc, "Litecoin"))
+
+    if options.etc > 0: # Generate Ethereum-classic wallets
+        logger.info("Generating {} {} wallets".format(options.etc, "Ethereum-classic"))
+        try: # Checking all stuff works correct
+            w = EthereumClassicWallet()
+        except Exception as e:
+            _exit(e)
+
+        with open("{}/ETC.csv".format(options.dir), "a") as ETC_file:
+            ETC_writer = writer(ETC_file, quotechar = "'")
+            ETC_writer.writerow(('Passphase', 'Address', 'Keystore'))
+
+            # Generate adresses & private keys
+            for i in range(options.etc):
+                passphase = urandom(16).hex()
+                address = w.get_address(passphase)
+                keystore = w.get_keystore_file(address)
+                ETC_writer.writerow((passphase, address, keystore))
+                write_same_line("New {} address: {}".format("Ethereum-classic", address))
+            print ("")
+
+        logger.info("{} {} addresses generated successfully".format(options.etc, "Ethereum-classic"))

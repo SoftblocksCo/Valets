@@ -3,8 +3,8 @@ from web3 import KeepAliveRPCProvider
 from glob import glob
 from os.path import expanduser
 
-class EthereumWallet():
-    def __init__(self, ethereum_path='/'.join([expanduser("~"), '.ethereum'])):
+class EthereumClassicWallet():
+    def __init__(self, ethereum_path='/'.join([expanduser("~"), '.ethereum-classic/mainnet'])):
         self.ethereum_pass = ethereum_path
         # DON'T FORGET TO LAUNCH GETH
         self.web3 = Web3(KeepAliveRPCProvider(host='localhost', port='8545')) # connect to RPC
