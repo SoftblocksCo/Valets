@@ -11,13 +11,9 @@ from csv import writer
 from utils import write_same_line
 from signal import signal
 from signal import SIGINT
+from importlib import import_module
 
 import logging
-
-from coins.BTC import BitcoinWallet
-from coins.ETH import EthereumWallet
-from coins.LTC import LitecoinWallet
-from coins.ETC import EthereumClassicWallet
 
 def _exit(msg):
     logger.error(msg)
@@ -38,6 +34,9 @@ logger.addHandler(console)
 
 parser = ArgumentParser(description='Revain wallets generator')
 
+parser.add_argument('-save', default='', type = str,
+    help="Enable save mode for wallets generation. Argument - strong password for private keys encription")
+
 parser.add_argument('-btc', help="Generate BTC (Bitcoin) wallets", default=0, type=int)
 parser.add_argument('-eth', help="Generate ETH (Ethereum) wallets", default=0, type=int)
 parser.add_argument('-etc', help="Generate ETC (Ethereum classic) wallets", default=0, type=int)
@@ -45,7 +44,9 @@ parser.add_argument('-ltc', help="Generate LTC (Litecoin) wallets", default=0, t
 parser.add_argument('-dash', help="Generate DASH (Dash) wallets", default=0, type=int)
 parser.add_argument('-xmr', help="Generate XMR (Monero) wallets", default=0, type=int)
 parser.add_argument('-zcash', help="Generate ZEC (ZCash) wallets", default=0, type=int)
+
 parser.add_argument('-d', '--dir', help="Directory to store wallets", default="_valets_{}".format(urandom(8).hex()))
+parser.add_argument('-c', '--coins', help="Specify coins for wallets generation", required=True, type=str, nargs='+', action='append')
 
 if __name__ == "__main__":
     options = parser.parse_args()
@@ -55,88 +56,43 @@ if __name__ == "__main__":
     except Exception as e:
         _exit(e)
 
-    if options.btc > 0: # Generate Bitcoin wallets
-        logger.info("Generating {} {} wallets".format(options.btc, "Bitcoin"))
-        try: # Trying to init bitcoind and check bitcoin-cli
-            w = BitcoinWallet()
+    for coin, wallets_amount in options.coins: # Iterate on every coin
+        wallets_amount = int(wallets_amount)
+
+        logger.info("Generating {} {} wallets".format(wallets_amount, coin))
+
+        try: # Trying to init wallet class
+            wallet_module = import_module("coins.{}".format(coin)) # Import API module for specific wallet
+            w = getattr(wallet_module, "{}_wallet".format(coin))()
         except Exception as e:
             _exit(e)
 
-        with open("{}/BTC.csv".format(options.dir), "a") as BTC_file:
-            BTC_writer = writer(BTC_file)
-            BTC_writer.writerow(('Private_key', 'Address'))
+        with open("{}/{}.csv".format(options.dir, coin), "a") as wallet_file:
+            wallet_writer = writer(wallet_file)
+
+            if coin in ['ETH', 'ETC']:
+                wallet_writer.writerow(('Passphase', 'Address', 'Keystore'))
+            else:
+                wallet_writer.writerow(('Private_key', 'Address'))
 
             # Generate adresses & private keys
-            for i in range(options.btc):
-                address = w.get_address()
-                private_key = w.get_private_key(address)
-                BTC_writer.writerow((private_key, address))
-                write_same_line("New {} address: {}".format("Bitcoin", address))
+            for i in range(1, wallets_amount+1):
+                if coin in ['ETH', 'ETC']: # Ethereum like coins have a special wallet structure
+                    passphase = urandom(16).hex()
+                    address = w.get_address(passphase)
+                    keystore = w.get_keystore_file(address)
+                    wallet_writer.writerow((passphase, address, keystore))
+
+                    wallet_writer.writerow((passphase, address, keystore)) # Store wallet info
+                else:
+                    address = w.get_address()
+                    private_key = w.get_private_key(address)
+                    wallet_writer.writerow((private_key, address))
+
+                    wallet_writer.writerow((private_key, address)) # Store wallet info
+
+                write_same_line("New {} address ({}): {}".format(coin, i, address))
             print ("")
 
-        logger.info("{} {} addresses generated successfully".format(options.btc, "Bitcoin"))
 
-    if options.eth > 0: # Generate Ethereum wallets
-        logger.info("Generating {} {} wallets".format(options.eth, "Ethereum"))
-        try: # Checking all stuff works correct
-            w = EthereumWallet()
-        except Exception as e:
-            _exit(e)
-
-        with open("{}/ETH.csv".format(options.dir), "a") as ETH_file:
-            ETH_writer = writer(ETH_file, quotechar = "'")
-            ETH_writer.writerow(('Passphase', 'Address', 'Keystore'))
-
-            # Generate adresses & private keys
-            for i in range(options.eth):
-                passphase = urandom(16).hex()
-                address = w.get_address(passphase)
-                keystore = w.get_keystore_file(address)
-                ETH_writer.writerow((passphase, address, keystore))
-                write_same_line("New {} address: {}".format("Ethereum", address))
-            print ("")
-
-        logger.info("{} {} addresses generated successfully".format(options.eth, "Ethereum"))
-
-    if options.ltc > 0: # Generate Litecoin wallets
-        logger.info("Generating {} {} wallets".format(options.btc, "Litecoin"))
-        try: # Trying to init litecoind and check litecoin-cli
-            w = LitecoinWallet()
-        except Exception as e:
-            _exit(e)
-
-        with open("{}/LTC.csv".format(options.dir), "a") as LTC_file:
-            LTC_writer = writer(LTC_file)
-            LTC_writer.writerow(('Private_key', 'Address'))
-
-            # Generate adresses & private keys
-            for i in range(options.ltc):
-                address = w.get_address()
-                private_key = w.get_private_key(address)
-                LTC_writer.writerow((private_key, address))
-                write_same_line("New {} address: {}".format("Litecoin", address))
-            print ("")
-
-        logger.info("{} {} addresses generated successfully".format(options.ltc, "Litecoin"))
-
-    if options.etc > 0: # Generate Ethereum-classic wallets
-        logger.info("Generating {} {} wallets".format(options.etc, "Ethereum-classic"))
-        try: # Checking all stuff works correct
-            w = EthereumClassicWallet()
-        except Exception as e:
-            _exit(e)
-
-        with open("{}/ETC.csv".format(options.dir), "a") as ETC_file:
-            ETC_writer = writer(ETC_file, quotechar = "'")
-            ETC_writer.writerow(('Passphase', 'Address', 'Keystore'))
-
-            # Generate adresses & private keys
-            for i in range(options.etc):
-                passphase = urandom(16).hex()
-                address = w.get_address(passphase)
-                keystore = w.get_keystore_file(address)
-                ETC_writer.writerow((passphase, address, keystore))
-                write_same_line("New {} address: {}".format("Ethereum-classic", address))
-            print ("")
-
-        logger.info("{} {} addresses generated successfully".format(options.etc, "Ethereum-classic"))
+            logger.info("{} {} addresses generated successfully".format(wallets_amount, coin))

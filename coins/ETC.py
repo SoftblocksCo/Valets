@@ -3,7 +3,7 @@ from web3 import KeepAliveRPCProvider
 from glob import glob
 from os.path import expanduser
 
-class EthereumClassicWallet():
+class ETC_wallet():
     def __init__(self, ethereum_path='/'.join([expanduser("~"), '.ethereum-classic/mainnet'])):
         self.ethereum_pass = ethereum_path
         # DON'T FORGET TO LAUNCH GETH

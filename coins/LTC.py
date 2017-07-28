@@ -1,6 +1,6 @@
 from subprocess import check_output
 
-class LitecoinWallet():
+class LTC_wallet():
     def __init__(self):
         # Litecoind should already be started
         # Otherwise exception will be raised

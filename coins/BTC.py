@@ -1,6 +1,6 @@
 from subprocess import check_output
 
-class BitcoinWallet():
+class BTC_wallet():
     def __init__(self):
         # Bitcoind should already be started
         # Otherwise exception will be raised
