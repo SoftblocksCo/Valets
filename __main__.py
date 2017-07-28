@@ -34,9 +34,6 @@ logger.addHandler(console)
 
 parser = ArgumentParser(description='Revain wallets generator')
 
-parser.add_argument('-save', default='', type = str,
-    help="Enable save mode for wallets generation. Argument - strong password for private keys encription")
-
 parser.add_argument('-btc', help="Generate BTC (Bitcoin) wallets", default=0, type=int)
 parser.add_argument('-eth', help="Generate ETH (Ethereum) wallets", default=0, type=int)
 parser.add_argument('-etc', help="Generate ETC (Ethereum classic) wallets", default=0, type=int)
@@ -67,32 +64,40 @@ if __name__ == "__main__":
         except Exception as e:
             _exit(e)
 
-        with open("{}/{}.csv".format(options.dir, coin), "a") as wallet_file:
-            wallet_writer = writer(wallet_file)
+        full_wallet_file = open("{}/full_{}.csv".format(options.dir, coin), 'a')
+        full_wallet_writer = writer(full_wallet_file)
 
-            if coin in ['ETH', 'ETC']:
-                wallet_writer.writerow(('Passphase', 'Address', 'Keystore'))
+        save_wallet_file = open("{}/save_{}.csv".format(options.dir, coin), 'a')
+        save_wallet_writer = writer(save_wallet_file)
+
+
+        if coin in ['ETH', 'ETC']:
+            full_wallet_writer.writerow(('Passphase', 'Address', 'Keystore'))
+            save_wallet_writer.writerow(('Passphase', 'Address', 'Keystore'))
+        else:
+            full_wallet_writer.writerow(('Private_key', 'Address'))
+            save_wallet_writer.writerow(('Private_key', 'Address'))
+
+        # Generate adresses & private keys
+        for i in range(1, wallets_amount + 1):
+            if coin in ['ETH', 'ETC']: # Ethereum like coins have a special wallet structure
+                passphase = urandom(16).hex()
+                address = w.get_address(passphase)
+                keystore = w.get_keystore_file(address)
+
+                full_wallet_writer.writerow((passphase, address, keystore)) # Store full wallet info
+                save_wallet_writer.writerow(('passphase', address, 'keystore')) # Store save wallet info
             else:
-                wallet_writer.writerow(('Private_key', 'Address'))
+                address = w.get_address()
+                private_key = w.get_private_key(address)
 
-            # Generate adresses & private keys
-            for i in range(1, wallets_amount+1):
-                if coin in ['ETH', 'ETC']: # Ethereum like coins have a special wallet structure
-                    passphase = urandom(16).hex()
-                    address = w.get_address(passphase)
-                    keystore = w.get_keystore_file(address)
-                    wallet_writer.writerow((passphase, address, keystore))
+                full_wallet_writer.writerow((private_key, address)) # Store full wallet info
+                save_wallet_writer.writerow(('private_key', address)) # Store save wallet info
 
-                    wallet_writer.writerow((passphase, address, keystore)) # Store wallet info
-                else:
-                    address = w.get_address()
-                    private_key = w.get_private_key(address)
-                    wallet_writer.writerow((private_key, address))
+            write_same_line("New {} address ({}): {}".format(coin, i, address))
+        print ("")
 
-                    wallet_writer.writerow((private_key, address)) # Store wallet info
+        full_wallet_file.close()
+        save_wallet_file.close()
 
-                write_same_line("New {} address ({}): {}".format(coin, i, address))
-            print ("")
-
-
-            logger.info("{} {} addresses generated successfully".format(wallets_amount, coin))
+        logger.info("{} {} addresses generated successfully".format(wallets_amount, coin))
