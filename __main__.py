@@ -34,19 +34,12 @@ logger.addHandler(console)
 
 parser = ArgumentParser(description='Revain wallets generator')
 
-parser.add_argument('-btc', help="Generate BTC (Bitcoin) wallets", default=0, type=int)
-parser.add_argument('-eth', help="Generate ETH (Ethereum) wallets", default=0, type=int)
-parser.add_argument('-etc', help="Generate ETC (Ethereum classic) wallets", default=0, type=int)
-parser.add_argument('-ltc', help="Generate LTC (Litecoin) wallets", default=0, type=int)
-parser.add_argument('-dash', help="Generate DASH (Dash) wallets", default=0, type=int)
-parser.add_argument('-xmr', help="Generate XMR (Monero) wallets", default=0, type=int)
-parser.add_argument('-zcash', help="Generate ZEC (ZCash) wallets", default=0, type=int)
-
 parser.add_argument('-d', '--dir', help="Directory to store wallets", default="_valets_{}".format(urandom(8).hex()))
-parser.add_argument('-c', '--coins', help="Specify coins for wallets generation", required=True, type=str, nargs='+', action='append')
+parser.add_argument('-c', '--coins', help="Specify coins for wallets generation, e.g. '-c BTC 100'", required=True, type=str, nargs='+', action='append')
 
 if __name__ == "__main__":
     options = parser.parse_args()
+
     try: # Trying to init NEW directory for storing wallets
         makedirs(options.dir)
         logger.info("Wallets folder: {}/".format(options.dir))
@@ -80,14 +73,14 @@ if __name__ == "__main__":
 
         # Generate adresses & private keys
         for i in range(1, wallets_amount + 1):
-            if coin in ['ETH', 'ETC']: # Ethereum like coins have a special wallet structure
+            if coin in ['ETH', 'ETC']: # Ethereum, Ethereum classic
                 passphase = urandom(16).hex()
                 address = w.get_address(passphase)
                 keystore = w.get_keystore_file(address)
 
                 full_wallet_writer.writerow((passphase, address, keystore)) # Store full wallet info
                 save_wallet_writer.writerow(('passphase', address, 'keystore')) # Store save wallet info
-            else:
+            else: # Bitcoin, Litecoin, Dash, Monero
                 address = w.get_address()
                 private_key = w.get_private_key(address)
 
@@ -95,7 +88,8 @@ if __name__ == "__main__":
                 save_wallet_writer.writerow(('private_key', address)) # Store save wallet info
 
             write_same_line("New {} address ({}): {}".format(coin, i, address))
-        print ("")
+
+        print ("") # Because 'write_same_line' don't use \n
 
         full_wallet_file.close()
         save_wallet_file.close()
