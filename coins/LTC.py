@@ -1,21 +1,32 @@
-from subprocess import check_output
+import requests
+import json
 
 class LTC_wallet():
-    def __init__(self):
-        # Litecoind should already be started
-        # Otherwise exception will be raised
-        tmp_address = check_output(['litecoin-cli', 'getnewaddress'])
+    def __init__(self, options):
+        self.USERNAME = options.ltc_rpc_user
+        self.PASSWORD = options.ltc_rpc_pass
+        self.PORT = options.ltc_rpc_port
+        self.HOST = options.ltc_rpc_host
+
+        self.ACCOUNT = options.ltc_rpc_account
+
+        self.URL = "http://{}:{}@{}:{}".format(self.USERNAME, self.PASSWORD, self.HOST, self.PORT)
+        self.HEADERS = {'content-type' : 'application/json'}
 
     def get_private_key(self, address):
-        """Get private key for address with litecoin-cli"""
-        private_key = check_output(['litecoin-cli', 'dumpprivkey', address])
-        private_key = private_key.rstrip() # Remove end line symbol
+        """Get private key for address with litecoin-cli RPC query"""
+        payload = json.dumps({'method':'dumpprivkey', 'params' : [address], "jsonrpc": "2.0"})
 
-        return private_key.decode('utf-8')
+        r = requests.post(self.URL, headers=self.HEADERS, data=payload)
+        private_key = json.loads(r.text).get('result')
 
-    def get_address(self, account):
-        """Generate new address with litecoin-cli"""
-        address = check_output(['litecoin-cli', 'getnewaddress', account])
-        address = address.rstrip() # Remove end line symbol
+        return private_key
 
-        return address.decode('utf-8')
+    def get_address(self):
+        """Generate new address with litecoin-cli RPC query"""
+        payload = json.dumps({'method':'getnewaddress', 'params' : [self.ACCOUNT], "jsonrpc": "2.0"})
+
+        r = requests.post(self.URL, headers=self.HEADERS, data=payload)
+        address = json.loads(r.text).get('result')
+
+        return address

@@ -34,14 +34,35 @@ logger.addHandler(console)
 
 parser = ArgumentParser(description='Revain wallets generator')
 
+# General Valets options
 parser.add_argument('-d', '--dir', help="Directory to store wallets", default="_valets_{}".format(urandom(8).hex()))
 parser.add_argument('-c', '--coins', help="Specify coins for wallets generation, e.g. '-c BTC 100'", required=True, type=str, nargs='+', action='append')
-parser.add_argument('-a', '--cli_account', help="All addresses will be pointed to this account name", default="pavlovdog")
+
+# Bitcoin options
+parser.add_argument('--btc_rpc_user', help="Username for bitcoind RPC", default="MudxbKFOKKGn8FcUFXYM")
+parser.add_argument('--btc_rpc_pass', help="Password for bitcoind RPC", required=True)
+parser.add_argument('--btc_rpc_port', help="Port for bitcoind RPC", default=8289, type=int)
+parser.add_argument('--btc_rpc_host', help="Host for bitcoind RPC", default="127.0.0.1")
+parser.add_argument('--btc_rpc_account', help="Account for bitcoind", default="REdaT24DQsJFBHp0nIAQ")
+
+# Litecoin options
+parser.add_argument('--ltc_rpc_user', help="Username for litecoind RPC", default="eZaEkhjfIeKXYcikomQP")
+parser.add_argument('--ltc_rpc_pass', help="Password for litecoind RPC", required=True)
+parser.add_argument('--ltc_rpc_port', help="Port for litecoind RPC", default=8299, type=int)
+parser.add_argument('--ltc_rpc_host', help="Host for litecoind RPC", default="127.0.0.1")
+parser.add_argument('--ltc_rpc_account', help="Account for litecoind", default="xes89NMnaXAPydpshQ3S")
+
+# Dash options
+parser.add_argument('--dash_rpc_user', help="Username for dashd RPC", default="i4C1M6uGx7i6SphDs3PK")
+parser.add_argument('--dash_rpc_pass', help="Password for dashd RPC", required=True)
+parser.add_argument('--dash_rpc_port', help="Port for dashd RPC", default=8309, type=int)
+parser.add_argument('--dash_rpc_host', help="Host for dashd RPC", default="127.0.0.1")
+parser.add_argument('--dash_rpc_account', help="Account for dashd", default="sVGSBSCplK02xXLl9qAL")
 
 if __name__ == "__main__":
     options = parser.parse_args()
 
-    try: # Trying to init NEW directory for storing wallets
+    try: # Trying to init new directory for storing wallets
         makedirs(options.dir)
         logger.info("Wallets folder: {}/".format(options.dir))
     except Exception as e:
@@ -54,7 +75,7 @@ if __name__ == "__main__":
 
         try: # Trying to init wallet class
             wallet_module = import_module("coins.{}".format(coin)) # Import API module for specific wallet
-            w = getattr(wallet_module, "{}_wallet".format(coin))()
+            w = getattr(wallet_module, "{}_wallet".format(coin))(options=options)
         except Exception as e:
             _exit(e)
 
@@ -81,7 +102,7 @@ if __name__ == "__main__":
                 full_wallet_writer.writerow((passphase, address, keystore)) # Store full wallet info
                 save_wallet_writer.writerow(('passphase', address, 'keystore')) # Store save wallet info
             else: # Bitcoin, Litecoin, Dash, Monero
-                address = w.get_address(account=options.cli_account)
+                address = w.get_address()
                 private_key = w.get_private_key(address)
 
                 full_wallet_writer.writerow((private_key, address)) # Store full wallet info

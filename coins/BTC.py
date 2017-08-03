@@ -1,21 +1,32 @@
-from subprocess import check_output
+import requests
+import json
 
 class BTC_wallet():
-    def __init__(self):
-        # Bitcoind should already be started
-        # Otherwise exception will be raised
-        tmp_address = check_output(['bitcoin-cli', 'getnewaddress'])
+    def __init__(self, options):
+        self.USERNAME = options.btc_rpc_user
+        self.PASSWORD = options.btc_rpc_pass
+        self.PORT = options.btc_rpc_port
+        self.HOST = options.btc_rpc_host
+
+        self.ACCOUNT = options.btc_rpc_account
+
+        self.URL = "http://{}:{}@{}:{}".format(self.USERNAME, self.PASSWORD, self.HOST, self.PORT)
+        self.HEADERS = {'content-type' : 'application/json'}
 
     def get_private_key(self, address):
-        """Get private key for address with bitcoin-cli"""
-        private_key = check_output(['bitcoin-cli', 'dumpprivkey', address])
-        private_key = private_key.rstrip() # Remove end line symbol
+        """Get private key for address with bitcoin-cli RPC query"""
+        payload = json.dumps({'method':'dumpprivkey', 'params' : [address], "jsonrpc": "2.0"})
 
-        return private_key.decode('utf-8')
+        r = requests.post(self.URL, headers=self.HEADERS, data=payload)
+        private_key = json.loads(r.text).get('result')
 
-    def get_address(self, account):
-        """Generate new address with bitcoin-cli"""
-        address = check_output(['bitcoin-cli', 'getnewaddress', account])
-        address = address.rstrip() # Remove end line symbol
+        return private_key
 
-        return address.decode('utf-8')
+    def get_address(self):
+        """Generate new address with bitcoin-cli RPC query"""
+        payload = json.dumps({'method':'getnewaddress', 'params' : [self.ACCOUNT], "jsonrpc": "2.0"})
+
+        r = requests.post(self.URL, headers=self.HEADERS, data=payload)
+        address = json.loads(r.text).get('result')
+
+        return address
