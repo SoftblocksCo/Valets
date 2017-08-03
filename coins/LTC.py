@@ -13,9 +13,9 @@ class LTC_wallet():
 
         return private_key.decode('utf-8')
 
-    def get_address(self):
+    def get_address(self, account):
         """Generate new address with litecoin-cli"""
-        address = check_output(['litecoin-cli', 'getnewaddress'])
+        address = check_output(['litecoin-cli', 'getnewaddress', account])
         address = address.rstrip() # Remove end line symbol
 
         return address.decode('utf-8')

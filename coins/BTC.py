@@ -13,9 +13,9 @@ class BTC_wallet():
 
         return private_key.decode('utf-8')
 
-    def get_address(self):
+    def get_address(self, account):
         """Generate new address with bitcoin-cli"""
-        address = check_output(['bitcoin-cli', 'getnewaddress'])
+        address = check_output(['bitcoin-cli', 'getnewaddress', account])
         address = address.rstrip() # Remove end line symbol
 
         return address.decode('utf-8')
