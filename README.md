@@ -1,15 +1,15 @@
 # Valets - simple cryptocurrency wallets generator
 Written in Python 3. Made with love inside the [Revain](https://revain.org) company.
 
-## What is it?
+# What is it?
 Данный проект позволяет автоматически создавать тысячи адресов для 12 различных криптовалют. В добавок, все адреса автоматически индексируются клиентами каждой криптовалюты и можно использовать их RPC API для выяснения баланса, списка транзакций и так далее.
 
-![General scheme](https://image.ibb.co/daDj2F/Payments.png)
+![General scheme](https://image.ibb.co/gi8tUv/Payments_1.png)
 
-## ⚠️ Warning ⚠️
+# ⚠️ Warning ⚠️
 **Не рекомендуется использовать Valets в реальных целях, на данный момент проект не протестирован должным образом.**
 
-## Supported currencies
+# Supported currencies
 | Name (Coinmarketcap link)                | Status    | Volume (24h)    | Website                            | For developers                           |
 | ---------------------------------------- | --------- | --------------- | ---------------------------------- | ---------------------------------------- |
 | Bitcoin ([link](https://coinmarketcap.com/currencies/bitcoin/)) | **Ready** | 1.000.000.000 $ | https://bitcoin.org/               | [Bitcoin-cli](https://en.bitcoin.it/wiki/Original_Bitcoin_client/API_calls_list) |
@@ -25,85 +25,273 @@ Written in Python 3. Made with love inside the [Revain](https://revain.org) comp
 | Dogecoin ([link](https://coinmarketcap.com/currencies/dogecoin/)) | In dev    | 5.000.000 $     | http://dogecoin.com/               | [Dogecoin-cli](https://github.com/dogecoin/dogecoin/releases) |
 | Emercoin ([link](https://coinmarketcap.com/currencies/emercoin/)) | In dev    | 200.000 $       | http://emercoin.com/               | [Emercoin-cli](https://emercoin.com/EMERCOIND) |
 
-## Usage
-Все инструкции написаны для использования проекта из под Linux (Ubuntu).
+# Install currencies clients
 
-### Clone & install dependencies
-```
-sudo apt-get update
-sudo apt-get install virtualenv git python-dev python3 python3-pip
+## Bitcoin
 
-git clone https://github.com/Revain/Valets
-cd Valets/
-virtualenv --python python3 --no-site-packages venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
+- Installation guide - ["Running A Full Node"](https://bitcoin.org/en/full-node)
+- Block explorer - [link](https://blockchain.info/)
 
-### Install and launch third party apps
-Valets использует оригинальные клиенты для каждой криптовалюты. Поэтому для генерации кошельков нужно предварительно установить и запустить клиенты для тех валют, которыми вы собираетесь пользоваться.
+**Install**
 
-#### Bitcoin
 ```bash
-sudo apt install software-properties-common
+sudo apt-get install software-properties-common
 sudo add-apt-repository ppa:bitcoin/bitcoin
-sudo apt update
-sudo apt install bitcoind
-
-bitcoind -daemon # Run bitcoind
+sudo apt-get update
+sudo apt-get install bitcoind
 ```
 
-#### Ethereum
+**Configure**
+
 ```bash
+bitcoind # Press CTRL+C right after launch
+# All you need right now - is to init datadir
+
+echo 'rpcuser=USERNAME' > ~/.bitcoin/bitcoin.conf
+echo 'rpcpassword=PASSWORD' >> ~/.bitcoin/bitcoin.conf
+echo 'rpcbind=127.0.0.1' >> ~/.bitcoin/bitcoin.conf
+echo 'rpcport=8332' >> ~/.bitcoin/bitcoin.conf
+echo 'server=1' >> ~/.bitcoin/bitcoin.conf
+```
+
+**Run & check RPC**
+
+```bash
+bitcoind -daemon
+
+curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://USERNAME:PASSWORD@127.0.0.1:8332/ | python -mjson.tool
+```
+
+**Stop**
+
+```bash
+bitcoin-cli stop
+```
+
+## Bitcoin cash
+
+- Bitcoin ABC used as command line tool, official website is [here](https://www.bitcoinabc.org/).
+- Block explorer - [link](https://bitinfocharts.com/bitcoin%20cash/explorer/)
+
+**Install**
+
+```bash
+wget https://download.bitcoinabc.org/0.14.6/linux/bitcoin-0.14.6-x86_64-linux-gnu.tar.gz
+tar xzf bitcoin-0.14.6-x86_64-linux-gnu.tar.gz
+rm bitcoin-0.14.6-x86_64-linux-gnu.tar.gz
+mv bitcoin-0.14.6 Bitcoin-ABC
+cd Bitcoin-ABC/bin
+rename 's/bitcoin/bitcoinabc/' *
+sudo cp * /usr/bin/
+```
+
+**Configure**
+
+```bash
+mkdir .bitcoinabc # Run only once, before first launch
+
+echo 'rpcuser=USERNAME' > ~/.bitcoinabc/bitcoin.conf
+echo 'rpcpassword=PASSWORD' >> ~/.bitcoinabc/bitcoin.conf
+echo 'rpcbind=127.0.0.1' >> ~/.bitcoinabc/bitcoin.conf
+echo 'rpcport=8432' >> ~/.bitcoinabc/bitcoin.conf
+echo 'server=1' >> ~/.bitcoinabc/bitcoin.conf
+```
+
+**Run & check**
+
+```bash
+bitcoinabcd -daemon -datadir=.bitcoinabc -port=8555
+
+curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://USERNAME:PASSWORD@127.0.0.1:8432/ | python -mjson.tool
+```
+
+**Stop**
+
+```bash
+bitcoinabc-cli stop
+```
+
+## Ethereum
+
+Offical guide, by [ethereum.org](https://ethereum.org) - [link](https://www.ethereum.org/cli#geth)
+
+**Install**
+
+```bash
+sudo apt-get install software-properties-common
 sudo add-apt-repository -y ppa:ethereum/ethereum
 sudo apt-get update
 sudo apt-get install ethereum
-
-geth --rpc --rpcaddr "127.0.0.1" --rpcapi "admin,debug,miner,shh,txpool,personal,eth,net,web3" console # Run
 ```
 
-#### Ethereum classic
+**Configure**
+
+```bash
+# No need to config anything
+```
+
+**Run**
+
+```bash
+geth --rpc --rpcaddr "127.0.0.1" --rpcport 8532 --rpcapi "admin,debug,miner,shh,txpool,personal,eth,net,web3" console
+```
+
+**Stop**
+
+```bash
+# Just type 'exit' in the Geth console
+```
+
+## Ethereum classic
+
+**Install**
 
 ```bash
 wget https://github.com/ethereumproject/go-ethereum/releases/download/v3.5.86/geth-classic-linux-v3.5.0.86-db60074.tar.gz
-mv geth geth-clasic
+tar xzf geth-classic-linux-v3.5.0.86-db60074.tar.gz
+rm geth-classic-linux-v3.5.0.86-db60074.tar.gz
+mv geth geth-classic
 sudo cp geth-classic /usr/bin # Make geth-classic systemwide available
-
-geth-classic --rpc --rpcaddr "127.0.0.1" --rpcapi "admin,debug,miner,shh,txpool,personal,eth,net,web3" --port 30304 --rpcport 8546 console # Running on non-typical ports (30304 and 8546) for the purpose of collision avoidane with geth
 ```
 
-#### Dash
+**Configure**
 
 ```bash
-wget https://www.dash.org/binaries/dashcore-0.12.1.5-linux64.tar.gz # https://www.dash.org/wallets/#linux
-tar xfz dashcore-0.12.1.5-linux64.tar.gz
-cd dashcore-0.12.1/bin
-sudo cp * /usr/bin # Make binaries systemwide available
-
-dashd -daemon # Run
+# No need to config anything
 ```
 
-#### Litecoin
+**Run**
+
+```bash
+geth-classic --rpc --rpcaddr "127.0.0.1" --rpcapi "admin,debug,miner,shh,txpool,personal,eth,net,web3" --rpcport 8632 --port 30304 console # Running on non-typical ports (30304 and 8632) for the purpose of collision avoidane with geth
+```
+
+**Stop**
+
+```bash
+# Just type 'exit' in the Geth-classic console
+```
+
+## Litecoin
+
+**Install**
 
 ```bash
 wget https://download.litecoin.org/litecoin-0.14.2/linux/litecoin-0.14.2-x86_64-linux-gnu.tar.gz
 tar xzf litecoin-0.14.2-x86_64-linux-gnu.tar.gz
-cd litecoin-0.14.2/bin/
+rm litecoin-0.14.2-x86_64-linux-gnu.tar.gz
+mv litecoin-0.14.2/ Litecoin
+cd Litecoin/bin/
 sudo cp * /usr/bin # Make binaries systemwide available
-
-litecoind -daemon # Run
 ```
 
-#### Reddcoin
+**Configure**
 
 ```bash
-wget https://github.com/reddcoin-project/reddcoin/releases/download/v2.0.0.0/reddcoin-2.0.0.0-linux.tar.gz
-tar xzf reddcoin-2.0.0.0-linux.tar.gz
-cd reddcoin-2.0.0.0-linux/bin/64/
-sudo mv * /usr/bin # Make binaries systemwide available
+litecoind # Press CTRL+C right after launch
+# All you need right now - is to init datadir
+
+echo 'rpcuser=USERNAME' > ~/.litecoin/litecoin.conf
+echo 'rpcpassword=PASSWORD' >> ~/.litecoin/litecoin.conf
+echo 'rpcbind=127.0.0.1' >> ~/.litecoin/litecoin.conf
+echo 'rpcport=8732' >> ~/.litecoin/litecoin.conf
+echo 'server=1' >> ~/.litecoin/litecoin.conf
 ```
 
-#### ZCash
+**Run & check**
+
+```bash
+litecoind -daemon
+
+curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://USERNAME:PASSWORD@127.0.0.1:8732/ | python -mjson.tool
+```
+
+**Stop**
+
+```bash
+litecoin-cli stop
+```
+
+## Dogecoin
+
+**Install**
+
+```bash
+wget https://github.com/dogecoin/dogecoin/releases/download/v1.10.0/dogecoin-1.10.0-linux64.tar.gz
+tar xzf dogecoin-1.10.0-linux64.tar.gz
+rm dogecoin-1.10.0-linux64.tar.gz
+mv dogecoin-1.10.0/ Dogecoin
+cd Dogecoin/bin/
+sudo cp * /usr/bin
+```
+
+**Configure**
+
+```bash
+dogecoind # Press CTRL+C right after launch
+# All you need right now - is to init datadir
+
+echo 'rpcuser=USERNAME' > ~/.dogecoin/dogecoin.conf
+echo 'rpcpassword=PASSWORD' >> ~/.dogecoin/dogecoin.conf
+echo 'rpcbind=127.0.0.1' >> ~/.dogecoin/dogecoin.conf
+echo 'rpcport=8832' >> ~/.dogecoin/dogecoin.conf
+echo 'server=1' >> ~/.dogecoin/dogecoin.conf
+```
+
+**Run & check**
+
+```bash
+dogecoind -daemon
+
+curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://USERNAME:PASSWORD@127.0.0.1:8832/ | python -mjson.tool
+```
+
+**Stop**
+
+```bash
+dogecoin-cli stop
+```
+
+## Dash
+
+**Install**
+
+```bash
+wget https://www.dash.org/binaries/dashcore-0.12.1.5-linux64.tar.gz # https://www.dash.org/wallets/#linux
+tar xfz dashcore-0.12.1.5-linux64.tar.gz
+rm dashcore-0.12.1.5-linux64.tar.gz
+mv dashcore-0.12.1/ Dash
+cd Dash/bin/
+sudo cp * /usr/bin # Make binaries systemwide available
+```
+
+**Configure**
+
+```bash
+echo 'rpcuser=USERNAME' > ~/.dashcore/dash.conf
+echo 'rpcpassword=PASSWORD' >> ~/.dashcore/dash.conf
+echo 'rpcbind=127.0.0.1' >> ~/.dashcore/dash.conf
+echo 'rpcport=8932' >> ~/.dashcore/dash.conf
+echo 'server=1' >> ~/.dashcore/dash.conf
+```
+
+**Run & check**
+
+```bash
+dashd -daemon
+
+curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://USERNAME:PASSWORD@127.0.0.1:8932/ | python -mjson.tool
+```
+
+**Stop**
+
+```bash
+dash-cli stop
+```
+
+## Zcash
+
+**Install**
 
 ```bash
 sudo apt-get install apt-transport-https
@@ -113,47 +301,211 @@ sudo apt-get update
 sudo apt-get install zcash
 ```
 
-#### Peercoin
+**Configure**
 
 ```bash
+zcashd # Press CTRL+C right after launch
+# All you need right now - is to init datadir
 
+echo 'rpcuser=USERNAME' > ~/.zcash/zcash.conf
+echo 'rpcpassword=PASSWORD' >> ~/.zcash/zcash.conf
+echo 'rpcbind=127.0.0.1' >> ~/.zcash/zcash.conf
+echo 'rpcport=9032' >> ~/.zcash/zcash.conf
+echo 'server=1' >> ~/.zcash/zcash.conf
 ```
 
-#### Namecoin
+**Run & check**
+
+```bash
+zcash-fetch-params # Run this code before first launch
+zcashd -rescan -daemon
+
+curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://USERNAME:PASSWORD@127.0.0.1:9032/ | python -mjson.tool
+```
+
+**Stop**
+
+```bash
+zcash-cli stop
+```
+
+## Peercoin
+
+**Install**
+
+```bash
+# Peercoin releases alavilable only on Sourgeforge, so you should download it manually :(
+# Link - https://sourceforge.net/projects/ppcoin/files/
+scp ppcoin-0.5.4ppc-linux.tar.gz username@ip:~ # Use scp if necessary, to upload archive
+tar xzf ppcoin-0.5.4ppc-linux.tar.gz
+mv ppcoin-0.5.4ppc-linux/ Peercoin
+rm ppcoin-0.5.4ppc-linux.tar.gz
+cd Peercoin/bin/64/
+sudo cp * /usr/bin
+```
+
+**Configure**
+
+```bash
+ppcoind # Press CTRL+C right after launch
+# All you need right now - is to init datadir
+
+echo 'rpcuser=USERNAME' > ~/.ppcoin/ppcoin.conf
+echo 'rpcpassword=PASSWORD' >> ~/.ppcoin/ppcoin.conf
+echo 'rpcbind=127.0.0.1' >> ~/.ppcoin/ppcoin.conf
+echo 'rpcport=9132' >> ~/.ppcoin/ppcoin.conf
+echo 'server=1' >> ~/.ppcoin/ppcoin.conf
+```
+
+**Run & check**
+
+```bash
+ppcoind -daemon
+
+curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://USERNAME:PASSWORD@127.0.0.1:9132/ | python -mjson.tool
+```
+
+**Stop**
+
+```bash
+ppcoind stop
+```
+
+## Namecoin
+
+**Install**
 
 ```bash
 sudo sh -c "echo 'deb http://download.opensuse.org/repositories/home:/p_conrad:/coins/xUbuntu_16.04/ /' > /etc/apt/sources.list.d/namecoin.list"
 wget -nv http://download.opensuse.org/repositories/home:p_conrad:coins/xUbuntu_16.04/Release.key -O Release.key
+rm Release.key
 sudo apt-key add - < Release.key
 sudo apt-get update
 sudo apt-get install namecoin
 ```
 
-#### Emercoin
+**Configure**
 
 ```bash
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv B58C58F4
-sudo add-apt-repository 'deb http://download.emercoin.com/ubuntu xenial emercoin'
+namecoind # Press CTRL+C right after launch
+# All you need right now - is to init datadir
+
+echo 'rpcuser=USERNAME' > ~/.namecoin/namecoin.conf
+echo 'rpcpassword=PASSWORD' >> ~/.namecoin/namecoin.conf
+echo 'rpcbind=127.0.0.1' >> ~/.namecoin/namecoin.conf
+echo 'rpcport=9232' >> ~/.namecoin/namecoin.conf
+echo 'server=1' >> ~/.namecoin/namecoin.conf
+```
+
+**Run & check**
+
+```bash
+namecoin -daemon
+
+curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://USERNAME:PASSWORD@127.0.0.1:9232/ | python -mjson.tool
+```
+
+**Stop**
+
+```bash
+namecoind stop
+```
+
+## Emercoin
+
+**Install**
+
+```bash
+# Emercoin releases alavilable on Sourgeforge, so you should download it manually :(
+# Link - https://sourceforge.net/projects/emercoin/?source=typ_redirect
+scp emercoin-0.6.2-linux64.tar.gz username@ip:~ # Use scp if necessary, to upload archive
+tar xzf emercoin-0.6.2-linux64.tar.gz
+mv emercoin-0.6.2/ Emercoin
+rm emercoin-0.6.2-linux64.tar.gz
+cd Emercoin/bin/
+sudo cp * /usr/bin
+```
+
+**Configure**
+
+```bash
+namecoind # Press CTRL+C right after launch
+# All you need right now - is to init datadir
+
+echo 'rpcuser=USERNAME' > ~/.emercoin/emercoin.conf
+echo 'rpcpassword=PASSWORD' >> ~/.emercoin/emercoin.conf
+echo 'rpcbind=127.0.0.1' >> ~/.emercoin/emercoin.conf
+echo 'rpcport=9332' >> ~/.emercoin/emercoin.conf
+echo 'server=1' >> ~/.emercoin/emercoin.conf
+```
+
+**Run & check**
+
+```bash
+emercoind -daemon
+
+curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://USERNAME:PASSWORD@127.0.0.1:9332/ | python -mjson.tool
+```
+
+**Stop**
+
+```bash
+emercoin-cli stop
+```
+
+## Reddcoin
+
+**Install**
+
+```bash
+wget https://github.com/reddcoin-project/reddcoin/releases/download/v2.0.0.0/reddcoin-2.0.0.0-linux.tar.gz
+tar xzf reddcoin-2.0.0.0-linux.tar.gz
+rm reddcoin-2.0.0.0-linux.tar.gz
+mv reddcoin-2.0.0.0-linux Reddcoin
+cd Reddcoin/bin/64/
+sudo cp * /usr/bin # Make binaries systemwide available
+```
+
+**Configure**
+
+```bash
+reddcoind # Press CTRL+C right after launch
+# All you need right now - is to init datadir
+
+echo 'rpcuser=USERNAME' > ~/.reddcoin/reddcoin.conf
+echo 'rpcpassword=PASSWORD' >> ~/.reddcoin/reddcoin.conf
+echo 'rpcbind=127.0.0.1' >> ~/.reddcoin/reddcoin.conf
+echo 'rpcport=9432' >> ~/.reddcoin/reddcoin.conf
+echo 'server=1' >> ~/.reddcoin/reddcoin.conf
+```
+
+**Run**
+
+```bash
+reddcoind -daemon
+```
+
+**Stop**
+
+```bash
+reddcoin-cli stop
+```
+
+# Install Valets
+
+```bash
 sudo apt-get update
-sudo apt-get install emercoin
+sudo apt-get install virtualenv git python-dev python3 python3-pip git
+
+git clone https://github.com/Revain/Valets
+cd Valets/
+virtualenv --python python3 --no-site-packages venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
-#### Bitcoin cash
+# Run Valets
 
 ```bash
-
-```
-
-#### Dogecoin
-
-```bash
-wget https://github.com/dogecoin/dogecoin/releases/download/v1.10.0/dogecoin-1.10.0-linux64.tar.gz
-cd dogecoin-1.10.0/bin
-sudo mv * /usr/bin
-```
-
-### Run Valets
-
-```bash
-$ python Valets/ -c BTC 1000 -c LTC 1000 -c ETH 1000 -c ETC 2000 -a PICK_YOUR_NICKNAME
+$ python Valets/ -c BTC 1000 -c LTC 1000 -c ETH 1000 -c ETC 2000
 ```
