@@ -21,7 +21,7 @@ class Ethereum_like_wallet():
 
     def get_keystore_file(self, address):
         cropped_address = address.split('0x')[1]
-        keystore_file_path = glob('/'.join([self.ethereum_pass, 'keystore/*{}'.format(cropped_address)]))[0]
+        keystore_file_path = glob('/'.join([self.ethereum_path, 'keystore/*{}'.format(cropped_address)]))[0]
 
         with open(keystore_file_path, 'r') as keystore_file:
             keystore_content = keystore_file.read()
