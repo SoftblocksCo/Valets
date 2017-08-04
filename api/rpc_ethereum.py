@@ -3,12 +3,18 @@ from web3 import KeepAliveRPCProvider
 from glob import glob
 from os.path import expanduser
 
-class ETH_wallet():
-    def __init__(self, ethereum_path='/'.join([expanduser("~"), '.ethereum'])):
-        self.ethereum_pass = ethereum_path
-        # DON'T FORGET TO LAUNCH GETH
-        self.web3 = Web3(KeepAliveRPCProvider(host='localhost', port='8545')) # connect to RPC
-        self.web3.eth.accounts # Just checking
+class Ethereum_like_wallet():
+    def __init__(self, name, parser):
+        if name == 'ETH':
+            self.ethereum_path = '/'.join([expanduser("~"), '.ethereum'])
+        else:
+            self.ethereum_path = '/'.join([expanduser("~"), '.ethereum-classic'])
+
+        self.HOST = parser.get(name, 'rpcbind')
+        self.PORT = parser.get(name, 'rpcport')
+
+        # Don't forget to launch geth of geth-classic
+        self.web3 = Web3(KeepAliveRPCProvider(host=self.HOST, port=self.PORT)) # connect to RPC
 
     def get_address(self, passphase):
         return self.web3.personal.newAccount(passphase)
