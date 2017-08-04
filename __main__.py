@@ -49,6 +49,12 @@ if __name__ == "__main__":
     parser = ConfigParser()
     parser.read(options.ini)
 
+    try: # Trying to init NEW directory for storing wallets
+        makedirs(options.dir)
+        logger.info("Wallets folder: {}/".format(options.dir))
+    except Exception as e:
+        _exit(e)
+
     for coin, wallets_amount in options.coins: # Iterate on every coin
         wallets_amount = int(wallets_amount)
 

@@ -3,3 +3,4 @@ venv
 valets_*
 __pycache__/
 _valets_*
+rpc_credentials.ini
