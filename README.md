@@ -13,17 +13,17 @@ Written in Python 3. Made with love inside the [Revain](https://revain.org) comp
 | Name (Coinmarketcap link)                | Status    | Volume (24h)    | Website                            | For developers                           |
 | ---------------------------------------- | --------- | --------------- | ---------------------------------- | ---------------------------------------- |
 | Bitcoin ([link](https://coinmarketcap.com/currencies/bitcoin/)) | **Ready** | 1.000.000.000 $ | https://bitcoin.org/               | [Bitcoin-cli](https://en.bitcoin.it/wiki/Original_Bitcoin_client/API_calls_list) |
-| Bitcoin cash ([link](https://coinmarketcap.com/currencies/bitcoin-cash/)) | In dev    | 360.000.000 $   | https://www.bitcoincash.org/       | [Bitcoin-cli](https://en.bitcoin.it/wiki/Original_Bitcoin_client/API_calls_list) |
+| Bitcoin cash ([link](https://coinmarketcap.com/currencies/bitcoin-cash/)) | **Ready** | 360.000.000 $   | https://www.bitcoincash.org/       | [Bitcoin-cli](https://en.bitcoin.it/wiki/Original_Bitcoin_client/API_calls_list) |
 | Ethereum ([link](https://coinmarketcap.com/currencies/ethereum/)) | **Ready** | 785.000.000 $   | https://www.ethereum.org/          | [Geth](https://github.com/ethereum/go-ethereum/wiki/Managing-your-accounts) |
 | Ethereum classic ([link](https://coinmarketcap.com/currencies/ethereum-classic/)) | **Ready** | 87.000.000 $    | https://ethereumclassic.github.io/ | [Geth-classic](https://github.com/ethereumproject/go-ethereum/releases) |
 | Litecoin ([link](https://coinmarketcap.com/currencies/litecoin/)) | **Ready** | 119.000.000 $   | https://litecoin.com/              | [Litecoin-cli](https://litecoin.info/Litecoin_API) |
 | Dash ([link](https://coinmarketcap.com/currencies/dash/)) | **Ready** | 23.000.000 $    | https://www.dash.org/              | [Dash-cli](https://dashpay.atlassian.net/wiki/display/COMMUNITY/Dash+Command-line+arguments) |
-| Zcash ([link](https://coinmarketcap.com/currencies/zcash/)) | In dev    | 27.000.000 $    | https://z.cash/                    | [Zcash-cli](https://z.cash/download.html) |
-| Reddcoin ([link](https://coinmarketcap.com/currencies/reddcoin/)) | In dev    | 970.000 $       | http://www.reddcoin.com/           | [Reddcoin-cli](https://www.reddcoin.com/#Wallets) |
-| Namecoin ([link](https://coinmarketcap.com/currencies/namecoin/)) | In dev    | 145.000 $       | https://www.namecoin.org/          | [Namecoin-cli](https://wiki.namecoin.info/index.php?title=Install_and_Configure_Namecoin#3_Run_Namecoin) |
-| Peercoin ([link](https://coinmarketcap.com/currencies/peercoin/)) | In dev    | 340.000 $       | http://www.peercoin.net/           | [Peercoind](https://github.com/peercoin/peercoin/wiki/Installation) |
-| Dogecoin ([link](https://coinmarketcap.com/currencies/dogecoin/)) | In dev    | 5.000.000 $     | http://dogecoin.com/               | [Dogecoin-cli](https://github.com/dogecoin/dogecoin/releases) |
-| Emercoin ([link](https://coinmarketcap.com/currencies/emercoin/)) | In dev    | 200.000 $       | http://emercoin.com/               | [Emercoin-cli](https://emercoin.com/EMERCOIND) |
+| Zcash ([link](https://coinmarketcap.com/currencies/zcash/)) | **Ready** | 27.000.000 $    | https://z.cash/                    | [Zcash-cli](https://z.cash/download.html) |
+| Reddcoin ([link](https://coinmarketcap.com/currencies/reddcoin/)) | **Ready** | 970.000 $       | http://www.reddcoin.com/           | [Reddcoin-cli](https://www.reddcoin.com/#Wallets) |
+| Navcoin ([link](https://coinmarketcap.com/currencies/nav-coin/)) | In dev    | 145.000 $       | https://navcoin.org/               | [Navcoin-cli](https://navcoin.org/downloads/) |
+| Peercoin ([link](https://coinmarketcap.com/currencies/peercoin/)) | **Ready** | 340.000 $       | http://www.peercoin.net/           | [Peercoind](https://github.com/peercoin/peercoin/wiki/Installation) |
+| Dogecoin ([link](https://coinmarketcap.com/currencies/dogecoin/)) | **Ready** | 5.000.000 $     | http://dogecoin.com/               | [Dogecoin-cli](https://github.com/dogecoin/dogecoin/releases) |
+| Emercoin ([link](https://coinmarketcap.com/currencies/emercoin/)) | **Ready** | 200.000 $       | http://emercoin.com/               | [Emercoin-cli](https://emercoin.com/EMERCOIND) |
 
 # Install currencies clients
 
@@ -371,38 +371,38 @@ curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "pa
 ppcoind stop
 ```
 
-## Namecoin
+## Navcoin
 
 **Install**
 
 ```bash
-sudo sh -c "echo 'deb http://download.opensuse.org/repositories/home:/p_conrad:/coins/xUbuntu_16.04/ /' > /etc/apt/sources.list.d/namecoin.list"
-wget -nv http://download.opensuse.org/repositories/home:p_conrad:coins/xUbuntu_16.04/Release.key -O Release.key
-rm Release.key
-sudo apt-key add - < Release.key
-sudo apt-get update
-sudo apt-get install namecoin
+wget http://www.navcoin.org/files/navcoin-4.0.4/navcoin-4.0.4-x86_64-linux-gnu.tar.gz
+tar xzf navcoin-4.0.4-x86_64-linux-gnu.tar.gz
+rm navcoin-4.0.4-x86_64-linux-gnu.tar.gz
+mv navcoin-4.0.4 Navcoin
+cd Navcoin/bin/
+sudo cp * /usr/bin
 ```
 
 **Configure**
 
 ```bash
-namecoind # Press CTRL+C right after launch
+navcoind # Press CTRL+C right after launch
 # All you need right now - is to init datadir
 
-echo 'rpcuser=USERNAME' > ~/.namecoin/namecoin.conf
-echo 'rpcpassword=PASSWORD' >> ~/.namecoin/namecoin.conf
-echo 'rpcbind=127.0.0.1' >> ~/.namecoin/namecoin.conf
-echo 'rpcport=9232' >> ~/.namecoin/namecoin.conf
-echo 'server=1' >> ~/.namecoin/namecoin.conf
+echo 'rpcuser=USERNAME' > ~/.navcoin4/navcoin.conf
+echo 'rpcpassword=PASSWORD' >> ~/.navcoin4/navcoin.conf
+echo 'rpcbind=127.0.0.1' >> ~/.navcoin4/navcoin.conf
+echo 'rpcport=9532' >> ~/.navcoin4/navcoin.conf
+echo 'server=1' >> ~/.navcoin4/navcoin.conf
 ```
 
 **Run & check**
 
 ```bash
-namecoin -daemon
+navcoind -daemon
 
-curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://USERNAME:PASSWORD@127.0.0.1:9232/ | python -mjson.tool
+curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://USERNAME:PASSWORD@127.0.0.1:9532/ | python -mjson.tool
 ```
 
 **Stop**
