@@ -508,4 +508,8 @@ pip install -r requirements.txt
 
 ```bash
 $ python Valets/ -c BTC 1000 -c LTC 1000 -c ETH 1000 -c ETC 2000
+# Check every 12 currencies
+$ python Valets/ -c BTC 1 -c LTC 1 -c DASH 1 -c ZEC 1 -c NAV 1 -c PCC 1 -c BCH 1 -c DOGE 1 -c EMC 1 -c RDD 1 -c ETH 1 -c ETC 1
+# Generate 100 wallets per currency
+$ python Valets/ -c BTC 100 -c LTC 100 -c DASH 100 -c ZEC 100 -c NAV 100 -c PCC 100 -c BCH 100 -c DOGE 100 -c EMC 100 -c RDD 100 -c ETH 100 -c ETC 100
 ```
