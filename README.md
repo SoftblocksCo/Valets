@@ -4,7 +4,7 @@ Written in Python 3. Made with love inside the [Revain](https://revain.org) comp
 # What is it?
 Данный проект позволяет автоматически создавать тысячи адресов для 12 различных криптовалют. В добавок, все адреса автоматически индексируются клиентами каждой криптовалюты и можно использовать их RPC API для выяснения баланса, списка транзакций и так далее.
 
-![General scheme](https://image.ibb.co/gi8tUv/Payments_1.png)
+![General scheme](https://image.ibb.co/fDBHPv/Payments_2.png)
 
 # ⚠️ Warning ⚠️
 **Не рекомендуется использовать Valets в реальных целях, на данный момент проект не протестирован должным образом.**
@@ -20,7 +20,7 @@ Written in Python 3. Made with love inside the [Revain](https://revain.org) comp
 | Dash ([link](https://coinmarketcap.com/currencies/dash/)) | **Ready** | 23.000.000 $    | https://www.dash.org/              | [Dash-cli](https://dashpay.atlassian.net/wiki/display/COMMUNITY/Dash+Command-line+arguments) |
 | Zcash ([link](https://coinmarketcap.com/currencies/zcash/)) | **Ready** | 27.000.000 $    | https://z.cash/                    | [Zcash-cli](https://z.cash/download.html) |
 | Reddcoin ([link](https://coinmarketcap.com/currencies/reddcoin/)) | **Ready** | 970.000 $       | http://www.reddcoin.com/           | [Reddcoin-cli](https://www.reddcoin.com/#Wallets) |
-| Navcoin ([link](https://coinmarketcap.com/currencies/nav-coin/)) | In dev    | 145.000 $       | https://navcoin.org/               | [Navcoin-cli](https://navcoin.org/downloads/) |
+| Navcoin ([link](https://coinmarketcap.com/currencies/nav-coin/)) | **Ready** | 145.000 $       | https://navcoin.org/               | [Navcoin-cli](https://navcoin.org/downloads/) |
 | Peercoin ([link](https://coinmarketcap.com/currencies/peercoin/)) | **Ready** | 340.000 $       | http://www.peercoin.net/           | [Peercoind](https://github.com/peercoin/peercoin/wiki/Installation) |
 | Dogecoin ([link](https://coinmarketcap.com/currencies/dogecoin/)) | **Ready** | 5.000.000 $     | http://dogecoin.com/               | [Dogecoin-cli](https://github.com/dogecoin/dogecoin/releases) |
 | Emercoin ([link](https://coinmarketcap.com/currencies/emercoin/)) | **Ready** | 200.000 $       | http://emercoin.com/               | [Emercoin-cli](https://emercoin.com/EMERCOIND) |
