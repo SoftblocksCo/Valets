@@ -8,7 +8,7 @@ class Ethereum_like_wallet():
         if name == 'ETH':
             self.ethereum_path = '/'.join([expanduser("~"), '.ethereum'])
         else:
-            self.ethereum_path = '/'.join([expanduser("~"), '.ethereum-classic'])
+            self.ethereum_path = '/'.join([expanduser("~"), '.ethereum-classic/mainnet'])
 
         self.HOST = parser.get(name, 'rpcbind')
         self.PORT = parser.get(name, 'rpcport')
