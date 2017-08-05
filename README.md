@@ -70,37 +70,37 @@ bitcoin-cli stop
 
 ## Bitcoin cash
 
-- Bitcoin ABC used as command line tool, official website is [here](https://www.bitcoinabc.org/).
+- Bitcoin classic used as command line tool, official website is [here](https://bitcoinclassic.com/).
 - Block explorer - [link](https://bitinfocharts.com/bitcoin%20cash/explorer/)
 
 **Install**
 
 ```bash
-wget https://download.bitcoinabc.org/0.14.6/linux/bitcoin-0.14.6-x86_64-linux-gnu.tar.gz
-tar xzf bitcoin-0.14.6-x86_64-linux-gnu.tar.gz
-rm bitcoin-0.14.6-x86_64-linux-gnu.tar.gz
-mv bitcoin-0.14.6 Bitcoin-ABC
-cd Bitcoin-ABC/bin
-rename 's/bitcoin/bitcoinabc/' *
-sudo cp * /usr/bin/
+wget https://github.com/bitcoinclassic/bitcoinclassic/releases/download/v1.3.3uahf/bitcoin-1.3.3-linux64.tar.gz
+tar xfz bitcoin-1.3.3-linux64.tar.gz
+mv bitcoin-1.3.3 Bitcoinclassic
+rm bitcoin-1.3.3-linux64.tar.gz
+cd Bitcoinclassic/bin
+rename 's/bitcoin/bitcoinclassic/' *
+sudo cp * /usr/bin
 ```
 
 **Configure**
 
 ```bash
-mkdir .bitcoinabc # Run only once, before first launch
+mkdir .bitcoinclassic # Run only once, before first launch
 
-echo 'rpcuser=USERNAME' > ~/.bitcoinabc/bitcoin.conf
-echo 'rpcpassword=PASSWORD' >> ~/.bitcoinabc/bitcoin.conf
-echo 'rpcbind=127.0.0.1' >> ~/.bitcoinabc/bitcoin.conf
-echo 'rpcport=8432' >> ~/.bitcoinabc/bitcoin.conf
-echo 'server=1' >> ~/.bitcoinabc/bitcoin.conf
+echo 'rpcuser=USERNAME' > ~/.bitcoinclassic/bitcoin.conf
+echo 'rpcpassword=PASSWORD' >> ~/.bitcoinclassic/bitcoin.conf
+echo 'rpcbind=127.0.0.1' >> ~/.bitcoinclassic/bitcoin.conf
+echo 'rpcport=8432' >> ~/.bitcoinclassic/bitcoin.conf
+echo 'server=1' >> ~/.bitcoinclassic/bitcoin.conf
 ```
 
 **Run & check**
 
 ```bash
-bitcoinabcd -daemon -datadir=.bitcoinabc -port=8555
+bitcoinclassicd -daemon -datadir=.bitcoinclassic/
 
 curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://USERNAME:PASSWORD@127.0.0.1:8432/ | python -mjson.tool
 ```
