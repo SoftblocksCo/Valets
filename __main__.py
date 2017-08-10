@@ -44,7 +44,7 @@ parser = ArgumentParser(description='Revain wallets generator')
 parser.add_argument('-d', '--dir', help="Directory to store wallets", default="_valets_{}".format(urandom(8).hex()))
 parser.add_argument('-c', '--coins', help="Specify coins for wallets generation, e.g. '-c BTC 100'", required=True, type=str, nargs='+', action='append')
 parser.add_argument('-i', '--ini', help="Path to the .ini file", default="./Valets/config.ini")
-parser.add_argument('-p', '--pool', help="Size of pool for wallets generator", default=10)
+parser.add_argument('-p', '--pool', help="Size of pool for wallets generator", default=10, type=int)
 
 def generate_new_wallet(w, coin, i):
     if coin in ['ETH', 'ETC']: # Ethereum, Ethereum classic
