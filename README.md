@@ -95,7 +95,7 @@ echo 'rpcpassword=PASSWORD' >> ~/.bitcoinclassic/bitcoin.conf
 echo 'rpcbind=127.0.0.1' >> ~/.bitcoinclassic/bitcoin.conf
 echo 'rpcport=8432' >> ~/.bitcoinclassic/bitcoin.conf
 echo 'server=1' >> ~/.bitcoinclassic/bitcoin.conf
-echo 'bind=0.0.0.0:9333' >> ~/.bitcoinclassic/bitcoin.conf
+echo 'bind=0.0.0.0:9222' >> ~/.bitcoinclassic/bitcoin.conf
 ```
 
 **Run & check**
