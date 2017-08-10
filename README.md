@@ -4,7 +4,7 @@ Written in Python 3. Made with love inside the [Revain](https://revain.org) comp
 # What is it?
 Данный проект позволяет автоматически создавать тысячи адресов для 12 различных криптовалют. В добавок, все адреса автоматически индексируются клиентами каждой криптовалюты и можно использовать их RPC API для выяснения баланса, списка транзакций и так далее.
 
-![General scheme](https://image.ibb.co/fDBHPv/Payments_2.png)
+![General scheme](https://image.ibb.co/ipr6pv/Payments_3.png)
 
 # ⚠️ Warning ⚠️
 **Не рекомендуется использовать Valets в реальных целях, на данный момент проект не протестирован должным образом.**
