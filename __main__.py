@@ -7,7 +7,6 @@ from smtplib import SMTP
 from random import randint
 from os import makedirs
 from os import urandom
-from termcolor import colored
 from csv import writer
 from utils import write_same_line
 from signal import signal
@@ -16,6 +15,9 @@ from importlib import import_module
 
 from api.rpc_bitcoin import Bitcoin_like_wallet
 from api.rpc_ethereum import Ethereum_like_wallet
+
+from multiprocessing.pool import ThreadPool as Pool
+from functools import partial
 
 import logging
 
@@ -42,6 +44,26 @@ parser = ArgumentParser(description='Revain wallets generator')
 parser.add_argument('-d', '--dir', help="Directory to store wallets", default="_valets_{}".format(urandom(8).hex()))
 parser.add_argument('-c', '--coins', help="Specify coins for wallets generation, e.g. '-c BTC 100'", required=True, type=str, nargs='+', action='append')
 parser.add_argument('-i', '--ini', help="Path to the .ini file", default="./Valets/config.ini")
+parser.add_argument('-p', '--pool', help="Size of pool for wallets generator", default=10)
+
+def generate_new_wallet(w, coin, i):
+    if coin in ['ETH', 'ETC']: # Ethereum, Ethereum classic
+        passphase = urandom(16).hex()
+        address = w.get_address(passphase)
+        keystore = w.get_keystore_file(address)
+
+        full_credentials = (passphase, address, keystore)
+        save_credentials = ('passphase', address, 'keystore')
+    else: # Bitcoin, Litecoin, Dash, Dogecoin, ....
+        address = w.get_address()
+        private_key = w.get_private_key(address)
+
+        full_credentials = (private_key, address)
+        save_credentials = ('private_key', address)
+
+    write_same_line("New {} address ({}): {}".format(coin, i, address))
+
+    return {'full' : full_credentials, 'save' : save_credentials}
 
 if __name__ == "__main__":
     options = parser.parse_args()
@@ -75,26 +97,24 @@ if __name__ == "__main__":
             save_wallet_writer.writerow(('Private_key', 'Address'))
             w = Bitcoin_like_wallet(name=coin, parser=parser)
 
-        # Generate adresses & private keys
-        for i in range(1, wallets_amount + 1):
-            if coin in ['ETH', 'ETC']: # Ethereum, Ethereum classic
-                passphase = urandom(16).hex()
-                address = w.get_address(passphase)
-                keystore = w.get_keystore_file(address)
+        # Generate <wallets_amount> adresses & private keys in pool
+        p = Pool(options.pool)
 
-                full_wallet_writer.writerow((passphase, address, keystore)) # Store full wallet info
-                save_wallet_writer.writerow(('passphase', address, 'keystore')) # Store save wallet info
-            else: # Bitcoin, Litecoin, Dash, Dogecoin, ....
-                address = w.get_address()
-                private_key = w.get_private_key(address)
+        partial_generate_new_wallets = partial(generate_new_wallet, w, coin)
 
-                full_wallet_writer.writerow((private_key, address)) # Store full wallet info
-                save_wallet_writer.writerow(('private_key', address)) # Store save wallet info
-
-            write_same_line("New {} address ({}): {}".format(coin, i, address))
+        wallets_credentials = p.map(partial_generate_new_wallets, range(wallets_amount))
+        p.close()
+        p.join()
 
         print ("") # Because 'write_same_line' don't use \n
 
+        # Save wallets credentials
+        logger.info("Writing {} wallets credentials".format(coin))
+        for wallet_credential in wallets_credentials:
+            full_wallet_writer.writerow(wallet_credential['full'])
+            save_wallet_writer.writerow(wallet_credential['save'])
+
+        # Close files and move to the next coin
         full_wallet_file.close()
         save_wallet_file.close()
 
