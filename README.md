@@ -21,7 +21,7 @@ Written in Python 3. Made with love inside the [Revain](https://revain.org) comp
 | Zcash ([link](https://coinmarketcap.com/currencies/zcash/)) | **Ready** | 27.000.000 $    | https://z.cash/                    | [Zcash-cli](https://z.cash/download.html) |
 | Reddcoin ([link](https://coinmarketcap.com/currencies/reddcoin/)) | **Ready** | 970.000 $       | http://www.reddcoin.com/           | [Reddcoin-cli](https://www.reddcoin.com/#Wallets) |
 | Navcoin ([link](https://coinmarketcap.com/currencies/nav-coin/)) | **Ready** | 145.000 $       | https://navcoin.org/               | [Navcoin-cli](https://navcoin.org/downloads/) |
-| Peercoin ([link](https://coinmarketcap.com/currencies/peercoin/)) | **Ready** | 340.000 $       | http://www.peercoin.net/           | [Peercoind](https://github.com/peercoin/peercoin/wiki/Installation) |
+| Vertcoin ([link](https://coinmarketcap.com/currencies/vertcoin/)) | **Ready** | 550.000 $       | https://vertcoin.org/           | [Vertcoind](https://github.com/vertcoin/vertcoin/releases) |
 | Dogecoin ([link](https://coinmarketcap.com/currencies/dogecoin/)) | **Ready** | 5.000.000 $     | http://dogecoin.com/               | [Dogecoin-cli](https://github.com/dogecoin/dogecoin/releases) |
 | Emercoin ([link](https://coinmarketcap.com/currencies/emercoin/)) | **Ready** | 200.000 $       | http://emercoin.com/               | [Emercoin-cli](https://emercoin.com/EMERCOIND) |
 
