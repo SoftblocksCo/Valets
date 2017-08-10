@@ -376,6 +376,7 @@ ppcoind stop
 **Install**
 
 ```bash
+sudo apt-get install curl libcurl3
 wget http://www.navcoin.org/files/navcoin-4.0.4/navcoin-4.0.4-x86_64-linux-gnu.tar.gz
 tar xzf navcoin-4.0.4-x86_64-linux-gnu.tar.gz
 rm navcoin-4.0.4-x86_64-linux-gnu.tar.gz
