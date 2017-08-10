@@ -430,7 +430,7 @@ sudo cp * /usr/bin
 **Configure**
 
 ```bash
-namecoind # Press CTRL+C right after launch
+emercoind # Press CTRL+C right after launch
 # All you need right now - is to init datadir
 
 echo 'rpcuser=USERNAME' > ~/.emercoin/emercoin.conf
