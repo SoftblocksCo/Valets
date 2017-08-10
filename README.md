@@ -330,40 +330,38 @@ curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "pa
 zcash-cli stop
 ```
 
-## Peercoin
+## Vertcoin
 
 **Install**
 
 ```bash
-# Peercoin releases alavilable only on Sourgeforge, so you should download it manually :(
-# Link - https://sourceforge.net/projects/ppcoin/files/
-scp ppcoin-0.5.4ppc-linux.tar.gz username@ip:~ # Use scp if necessary, to upload archive
-tar xzf ppcoin-0.5.4ppc-linux.tar.gz
-mv ppcoin-0.5.4ppc-linux/ Peercoin
-rm ppcoin-0.5.4ppc-linux.tar.gz
-cd Peercoin/bin/64/
+wget https://github.com/vertcoin/vertcoin/releases/download/v0.11.1.0/vertcoin-v0.11.1.0-linux-64bit.zip
+unzip vertcoin-v0.11.1.0-linux-64bit.zip
+mv vertcoin* Vertcoin/
+rm vertcoin-v0.11.1.0-linux-64bit.zip
+cd Vertcoin/
 sudo cp * /usr/bin
 ```
 
 **Configure**
 
 ```bash
-ppcoind # Press CTRL+C right after launch
+vertcoind # Press CTRL+C right after launch
 # All you need right now - is to init datadir
 
-echo 'rpcuser=USERNAME' > ~/.ppcoin/ppcoin.conf
-echo 'rpcpassword=PASSWORD' >> ~/.ppcoin/ppcoin.conf
-echo 'rpcbind=127.0.0.1' >> ~/.ppcoin/ppcoin.conf
-echo 'rpcport=9132' >> ~/.ppcoin/ppcoin.conf
-echo 'server=1' >> ~/.ppcoin/ppcoin.conf
+echo 'rpcuser=USERNAME' > ~/.vertcoin/vertcoin.conf
+echo 'rpcpassword=PASSWORD' >> ~/.vertcoin/vertcoin.conf
+echo 'rpcbind=127.0.0.1' >> ~/.vertcoin/vertcoin.conf
+echo 'rpcport=9832' >> ~/.vertcoin/vertcoin.conf
+echo 'server=1' >> ~/.vertcoin/vertcoin.conf
 ```
 
 **Run & check**
 
 ```bash
-ppcoind -daemon
+vertcoind -daemon
 
-curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://USERNAME:PASSWORD@127.0.0.1:9132/ | python -mjson.tool
+curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://USERNAME:PASSWORD@127.0.0.1:9832/ | python -mjson.tool
 ```
 
 **Stop**
