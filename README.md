@@ -52,7 +52,7 @@ echo 'rpcpassword=PASSWORD' >> ~/.bitcoin/bitcoin.conf
 echo 'rpcbind=127.0.0.1' >> ~/.bitcoin/bitcoin.conf
 echo 'rpcport=8332' >> ~/.bitcoin/bitcoin.conf
 echo 'server=1' >> ~/.bitcoin/bitcoin.conf
-echo 'maxconnections=20' >> ~/.bitcoin/bitcoin.conf  
+echo 'maxconnections=10' >> ~/.bitcoin/bitcoin.conf  
 ```
 
 **Run & check RPC**
@@ -97,7 +97,7 @@ echo 'rpcbind=127.0.0.1' >> ~/.bitcoinclassic/bitcoin.conf
 echo 'rpcport=8432' >> ~/.bitcoinclassic/bitcoin.conf
 echo 'server=1' >> ~/.bitcoinclassic/bitcoin.conf
 echo 'bind=0.0.0.0:9222' >> ~/.bitcoinclassic/bitcoin.conf
-echo 'maxconnections=20' >> ~/.bitcoinclassic/bitcoin.conf  
+echo 'maxconnections=10' >> ~/.bitcoinclassic/bitcoin.conf  
 ```
 
 **Run & check**
@@ -199,7 +199,7 @@ echo 'rpcpassword=PASSWORD' >> ~/.litecoin/litecoin.conf
 echo 'rpcbind=127.0.0.1' >> ~/.litecoin/litecoin.conf
 echo 'rpcport=8732' >> ~/.litecoin/litecoin.conf
 echo 'server=1' >> ~/.litecoin/litecoin.conf
-echo 'maxconnections=20' >> ~/.litecoin/litecoin.conf  
+echo 'maxconnections=10' >> ~/.litecoin/litecoin.conf  
 ```
 
 **Run & check**
@@ -240,7 +240,7 @@ echo 'rpcpassword=PASSWORD' >> ~/.dogecoin/dogecoin.conf
 echo 'rpcbind=127.0.0.1' >> ~/.dogecoin/dogecoin.conf
 echo 'rpcport=8832' >> ~/.dogecoin/dogecoin.conf
 echo 'server=1' >> ~/.dogecoin/dogecoin.conf
-echo 'maxconnections=20' >> ~/.dogecoin/dogecoin.conf  
+echo 'maxconnections=10' >> ~/.dogecoin/dogecoin.conf  
 ```
 
 **Run & check**
@@ -278,7 +278,7 @@ echo 'rpcpassword=PASSWORD' >> ~/.dashcore/dash.conf
 echo 'rpcbind=127.0.0.1' >> ~/.dashcore/dash.conf
 echo 'rpcport=8932' >> ~/.dashcore/dash.conf
 echo 'server=1' >> ~/.dashcore/dash.conf
-echo 'maxconnections=20' >> ~/.dashcore/dash.conf  
+echo 'maxconnections=10' >> ~/.dashcore/dash.conf  
 ```
 
 **Run & check**
@@ -318,7 +318,7 @@ echo 'rpcpassword=PASSWORD' >> ~/.zcash/zcash.conf
 echo 'rpcbind=127.0.0.1' >> ~/.zcash/zcash.conf
 echo 'rpcport=9032' >> ~/.zcash/zcash.conf
 echo 'server=1' >> ~/.zcash/zcash.conf
-echo 'maxconnections=20' >> ~/.zcash/zcash.conf  
+echo 'maxconnections=10' >> ~/.zcash/zcash.conf  
 ```
 
 **Run & check**
@@ -360,7 +360,7 @@ echo 'rpcpassword=PASSWORD' >> ~/.vertcoin/vertcoin.conf
 echo 'rpcbind=127.0.0.1' >> ~/.vertcoin/vertcoin.conf
 echo 'rpcport=9832' >> ~/.vertcoin/vertcoin.conf
 echo 'server=1' >> ~/.vertcoin/vertcoin.conf
-echo 'maxconnections=20' >> ~/.vertcoin/vertcoin.conf  
+echo 'maxconnections=10' >> ~/.vertcoin/vertcoin.conf  
 ```
 
 **Run & check**
@@ -402,7 +402,7 @@ echo 'rpcpassword=PASSWORD' >> ~/.navcoin4/navcoin.conf
 echo 'rpcbind=127.0.0.1' >> ~/.navcoin4/navcoin.conf
 echo 'rpcport=9532' >> ~/.navcoin4/navcoin.conf
 echo 'server=1' >> ~/.navcoin4/navcoin.conf
-echo 'maxconnections=20' >> ~/.navcoin4/navcoin.conf  
+echo 'maxconnections=10' >> ~/.navcoin4/navcoin.conf  
 ```
 
 **Run & check**
@@ -445,7 +445,7 @@ echo 'rpcpassword=PASSWORD' >> ~/.emercoin/emercoin.conf
 echo 'rpcbind=127.0.0.1' >> ~/.emercoin/emercoin.conf
 echo 'rpcport=9332' >> ~/.emercoin/emercoin.conf
 echo 'server=1' >> ~/.emercoin/emercoin.conf
-echo 'maxconnections=20' >> ~/.emercoin/emercoin.conf  
+echo 'maxconnections=10' >> ~/.emercoin/emercoin.conf  
 ```
 
 **Run & check**
@@ -486,7 +486,7 @@ echo 'rpcpassword=PASSWORD' >> ~/.reddcoin/reddcoin.conf
 echo 'rpcbind=127.0.0.1' >> ~/.reddcoin/reddcoin.conf
 echo 'rpcport=9432' >> ~/.reddcoin/reddcoin.conf
 echo 'server=1' >> ~/.reddcoin/reddcoin.conf
-echo 'maxconnections=20' >> ~/.reddcoin/reddcoin.conf  
+echo 'maxconnections=10' >> ~/.reddcoin/reddcoin.conf  
 ```
 
 **Run**
