@@ -514,6 +514,24 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+# Set up crontab
+```bash
+@reboot bitcoind -daemon
+@reboot bitcoinclassicd -daemon -datadir=.bitcoinclassic/
+@reboot litecoind -daemon
+@reboot dogecoind -daemon
+@reboot dashd -daemon
+@reboot zcashd -daemon
+@reboot reddcoind -daemon
+@reboot emercoind -daemon
+@reboot navcoind -daemon
+@reboot vertcoind -daemon
+
+@reboot
+@reboot
+```
+
+
 # Run Valets
 
 ```bash
