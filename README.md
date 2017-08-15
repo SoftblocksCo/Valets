@@ -343,8 +343,9 @@ zcash-cli stop
 ```bash
 wget https://github.com/vertcoin/vertcoin/releases/download/v0.11.1.0/vertcoin-v0.11.1.0-linux-64bit.zip
 unzip vertcoin-v0.11.1.0-linux-64bit.zip
-mv vertcoin* Vertcoin/
 rm vertcoin-v0.11.1.0-linux-64bit.zip
+mkdir Vertcoin
+mv vertcoin* Vertcoin/
 cd Vertcoin/
 sudo cp * /usr/bin
 ```
