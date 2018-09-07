@@ -1,13 +1,10 @@
 # Valets - simple cryptocurrency wallets generator
-Written in Python 3.
+Written in Python 3. Allow you to generate thousands of wallets in 12 different crypto currencies and save all the credentials into the usual CSV file. Can be really useful for running an ICO, building an exchange or even accepting crypto payments instead of PayPal or something.
 
-# What is it?
-Данный проект позволяет автоматически создавать тысячи адресов для 12 различных криптовалют. В добавок, все адреса автоматически индексируются клиентами каждой криптовалюты и можно использовать их RPC API для выяснения баланса, списка транзакций и так далее.
+# Details
+To use this software you should install and synchronize all the necessary clients. For example, if you want to generate Bitcoin addresses - install `bitcoind` and so on. All the instructions are listed bellow. More than that - by generating wallets with your own node, you'll have the abality to query balances for generating addresses, view ttransactions list, etc.
 
 ![General scheme](https://image.ibb.co/ipr6pv/Payments_3.png)
-
-# ⚠️ Warning ⚠️
-**Не рекомендуется использовать Valets в реальных целях, на данный момент проект не протестирован должным образом.**
 
 # Supported currencies
 | Name (Coinmarketcap link)                | Status    | Volume (24h)    | Website                            | For developers                           |
