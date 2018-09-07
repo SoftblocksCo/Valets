@@ -1,5 +1,5 @@
 # Valets - simple cryptocurrency wallets generator
-Written in Python 3. Made with love inside the [Revain](https://revain.org) company.
+Written in Python 3.
 
 # What is it?
 Данный проект позволяет автоматически создавать тысячи адресов для 12 различных криптовалют. В добавок, все адреса автоматически индексируются клиентами каждой криптовалюты и можно использовать их RPC API для выяснения баланса, списка транзакций и так далее.
