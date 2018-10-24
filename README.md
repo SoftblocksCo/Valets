@@ -372,7 +372,7 @@ curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "pa
 **Stop**
 
 ```bash
-ppcoind stop
+vertcoin-cli stop
 ```
 
 ## Navcoin
