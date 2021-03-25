@@ -11,7 +11,7 @@ pkg-resources==0.0.0
 pybitcointools==1.1.15
 pylru==1.0.9
 pysha3==1.0.2
-PyYAML==3.12
+PyYAML==5.4
 requests==2.18.1
 rlp==0.5.1
 shellescape==3.4.1
